@@ -1,0 +1,8 @@
+{
+  "id": "wwwProdHttpd",
+  "image": "ryanschuhler/httpd:ism",
+  "env": {
+    "LIFERAY_CONTAINER_NAME": "wwwDxpLiferay",
+    "SERVER_NAME": "localhost"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "id": "wwwDxpLiferay",
+  "image": "ryanschuhler/liferay:www-dxp",
+  "volume": "/opt/java/liferay",
+  "env": {
+    "DB_CONTAINER": "wwwDxpMariadb",
+    "SEARCH_CONTAINER": "wwwDxpElasticsearch",
+    "VIRTUAL_PORT": "8080"
+  },
+  "memory": 4096,
+  "cpu": 3
+}

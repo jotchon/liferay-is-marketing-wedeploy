@@ -1,0 +1,17 @@
+{
+  "id": "wwwProdLiferay",
+  "image": "ryanschuhler/liferay:www-prod",
+  "volume": "/opt/java/liferay",
+  "env": {
+    "DB_CONTAINER": "www-prod-mariadb",
+    "SEARCH_CONTAINER": "wwwProdElasticsearch",
+    "LIFERAY_DEFAULT_PERIOD_ADMIN_PERIOD_PASSWORD": "www",
+    "LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_DRIVER_UPPERCASEC_lass_UPPERCASEN_ame": "org.mariadb.jdbc.Driver",
+    "LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_PASSWORD": "passw0rd",
+    "LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_URL": "jdbc:wwwProdMariadb://mariadb/lportal?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false",
+    "LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_USERNAME": "liferay",
+    "VIRTUAL_PORT": "8080"
+  },
+  "memory": 4096,
+  "cpu": 3
+}

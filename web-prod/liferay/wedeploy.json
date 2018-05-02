@@ -1,0 +1,12 @@
+{
+  "id": "webProdLiferay",
+  "image": "ryanschuhler/liferay:web-prod",
+  "volume": "/opt/java/liferay",
+  "env": {
+    "DB_CONTAINER": "webProdMariadb",
+    "SEARCH_CONTAINER": "webProdElasticsearch",
+    "VIRTUAL_PORT": "8080"
+  },
+  "memory": 4096,
+  "cpu": 3
+}
