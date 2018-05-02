@@ -1,5 +1,5 @@
 {
-  "id": "wwwDxpElasticsearch",
+  "id": "wwwdxpelasticsearch",
   "image": "ryanschuhler/elasticsearch:ism",
   "volume": "/usr/share/elasticsearch/data",
   "memory": 4096,

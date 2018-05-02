@@ -1,5 +1,5 @@
 {
-  "id": "webProdMariadb",
+  "id": "webprodmariadb",
   "image": "ryanschuhler/mariadb:ism",
   "volume": "/var/lib/mysql",
   "env": {
