@@ -1,8 +1,0 @@
-{
-  "id": "wwwprodhttpd",
-  "image": "ryanschuhler/httpd:ism",
-  "env": {
-    "LIFERAY_CONTAINER_NAME": "wwwdxpliferay",
-    "SERVER_NAME": "localhost"
-  }
-}
