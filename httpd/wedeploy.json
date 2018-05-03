@@ -2,7 +2,9 @@
   "id": "wwwprodhttpd",
   "image": "ryanschuhler/httpd:ism",
   "env": {
-    "LIFERAY_CONTAINER_NAME": "wwwdxpliferay",
+    "LIFERAY_CONTAINER_NAME": "wwwprodliferay",
     "SERVER_NAME": "localhost"
-  }
+  },
+  "memory": 2048,
+  "cpu": 2
 }
