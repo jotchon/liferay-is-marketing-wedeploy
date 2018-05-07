@@ -2,6 +2,7 @@
     "id": "liferay",
     "image": "ryanschuhler/liferay:www-prod",
     "volume": "/opt/java/liferay",
+    "dependencies": ["httpd", "mariadb", "elasticsearch"],
     "env": {
         "DB_CONTAINER": "mariadb",
         "SEARCH_CONTAINER": "elasticsearch",
