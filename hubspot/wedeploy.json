@@ -1,4 +1,4 @@
 {
-  "id": "wwwprodhubspot",
-  "image": "ryanschuhler/hubspot:ism"
+    "id": "hubspot",
+    "image": "ryanschuhler/hubspot:ism"
 }
