@@ -14,8 +14,8 @@ services:
       - "web_prod_external"
       - "web_prod_internal"
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - "9290:9200"
+      - "9390:9300"
     volumes:
       - "web_prod_elasticsearch:/usr/share/elasticsearch/data"
   web_prod_httpd:
@@ -30,8 +30,8 @@ services:
       - "web_prod_external"
       - "web_prod_internal"
     ports:
-      - "80:8090"
-      - "443:4493"
+      - "8090:80"
+      - "4493:443"
     volumes:
       - "web_prod_httpd:/var/www/html"
       - "./httpd/resources/:/tmp/httpd"
@@ -43,14 +43,14 @@ services:
       - "VIRTUAL_PORT=8080"
     image: ryanschuhler/liferay:web-prod
     ports:
-      - "8000:8000"
+      - "8900:8000"
     user: liferay
     networks:
       - "web_prod_external"
       - "web_prod_internal"
     volumes:
       - "web_prod_liferay:/opt/java/liferay/data"
-#      - "./liferay/deploy:/opt/java/liferay/deploy"
+      - "./liferay/deploy:/opt/java/liferay/deploy"
   web_prod_mariadb:
     container_name: web_prod_mariadb
     environment:
