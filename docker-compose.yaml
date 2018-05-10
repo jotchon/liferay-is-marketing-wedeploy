@@ -69,7 +69,7 @@ services:
       - "3307:3306"
     volumes:
       - "www_prod_mariadb:/var/lib/mysql"
-      - "./mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/"
+#      - "./mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/"
   www_prod_hubspot:
     container_name: www_prod_hubspot
     image: ryanschuhler/hubspot:ism
