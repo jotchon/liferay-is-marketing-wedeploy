@@ -22,7 +22,7 @@ services:
     container_name: www_prod_httpd
     environment:
       - "EXTRA_REWRITE_RULE="
-      - "EXTRA_REWRITE_COND="
+      - "EXTRA_REWRITE_COND=RewriteRule   '^/documents/(.+)'  'https://www.liferay.com/documents/$$1'"
       - "LIFERAY_CONTAINER_NAME=www_prod_liferay"
       - "SERVER_NAME=localhost"
     image: ryanschuhler/httpd:ism
