@@ -1,0 +1,87 @@
+version: '3.3'
+
+networks:
+  web_prod_external:
+    internal: false
+  web_prod_internal:
+    internal: true
+
+services:
+  web_prod_elasticsearch:
+    container_name: web_prod_elasticsearch
+    image: ryanschuhler/elasticsearch:ism
+    networks:
+      - "web_prod_external"
+      - "web_prod_internal"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - "web_prod_elasticsearch:/usr/share/elasticsearch/data"
+  web_prod_httpd:
+    container_name: web_prod_httpd
+    environment:
+      - "EXTRA_REWRITE_RULE="
+      - "EXTRA_REWRITE_COND="
+      - "LIFERAY_CONTAINER_NAME=web_prod_liferay"
+      - "SERVER_NAME=localhost"
+    image: ryanschuhler/httpd:ism
+    networks:
+      - "web_prod_external"
+      - "web_prod_internal"
+    ports:
+      - "80:8090"
+      - "443:4493"
+    volumes:
+      - "web_prod_httpd:/var/www/html"
+      - "./httpd/resources/:/tmp/httpd"
+  web_prod_liferay:
+    container_name: web_prod_liferay
+    depends_on:
+     - "web_prod_mariadb"
+    environment:
+      - "VIRTUAL_PORT=8080"
+    image: ryanschuhler/liferay:web-prod
+    ports:
+      - "8000:8000"
+    user: liferay
+    networks:
+      - "web_prod_external"
+      - "web_prod_internal"
+    volumes:
+      - "web_prod_liferay:/opt/java/liferay/data"
+#      - "./liferay/deploy:/opt/java/liferay/deploy"
+  web_prod_mariadb:
+    container_name: web_prod_mariadb
+    environment:
+      - "collation-server=utf8mb4_unicode_ci"
+      - "character-set-server=utf8mb4"
+      - "MYSQL_ROOT_PASSWORD=passw0rd"
+      - "MYSQL_DATABASE=lportal"
+      - "MYSQL_USER=liferay"
+    image: ryanschuhler/mariadb:ism
+    networks:
+      - "web_prod_external"
+      - "web_prod_internal"
+    ports:
+      - "3307:3306"
+    volumes:
+      - "web_prod_mariadb:/var/lib/mysql"
+      - "./mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/"
+  web_prod_mockmock:
+    container_name: web_prod_mockmock
+    image: ryanschuhler/mockmock:ism
+    networks:
+      - "web_prod_external"
+      - "web_prod_internal"
+    ports:
+      - "8282:8282"
+    volumes:
+      - "web_prod_mockmock:/home"
+
+volumes:
+  web_prod_elasticsearch:
+  web_prod_httpd:
+  web_prod_liferay:
+  web_prod_mariadb:
+  web_prod_mockmock:
