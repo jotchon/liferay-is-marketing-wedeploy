@@ -9,6 +9,8 @@ networks:
 services:
   www_prod_elasticsearch:
     container_name: www_prod_elasticsearch
+    environment:
+      - "cluster.name=www_prod_elasticsearch"
     image: ryanschuhler/elasticsearch:ism
     networks:
       - "www_prod_external"
@@ -46,13 +48,13 @@ services:
       - "8000:8000"
       - "11311:11311"
       - "12345:12345"
-    user: liferay
+    user: root
     networks:
       - "www_prod_external"
       - "www_prod_internal"
     volumes:
       - "www_prod_liferay:/opt/java/liferay/data"
-#      - "./liferay/deploy:/opt/java/liferay/deploy"
+      - "./liferay/deploy:/opt/java/liferay/deploy"
   www_prod_mariadb:
     container_name: www_prod_mariadb
     environment:
@@ -69,7 +71,7 @@ services:
       - "3307:3306"
     volumes:
       - "www_prod_mariadb:/var/lib/mysql"
-#      - "./mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/"
+      - "./mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/"
   www_prod_hubspot:
     container_name: www_prod_hubspot
     image: ryanschuhler/hubspot:ism
