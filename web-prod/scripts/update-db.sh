@@ -11,10 +11,9 @@ if [ -f ".username" ] && [ -f ".password" ]; then
 	CREDENTIALS="-u $(cat .username):$(cat .password)"
 fi
 
-docker rm ${CONTAINTER_NAME}
-docker volume rm ${VOLUME_NAME}
-
 rm ${INIT_DB_DIR}/*
 curl ${CREDENTIALS} -o ${INIT_DB_DIR}/${DATABASE_URL##*/} -fSL ${DATABASE_URL}
 
+docker rm ${CONTAINTER_NAME}
+docker volume rm ${VOLUME_NAME}
 docker-compose up ${CONTAINTER_NAME}
