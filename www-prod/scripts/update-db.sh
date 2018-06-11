@@ -3,7 +3,7 @@
 CONTAINTER_DIR=/docker-entrypoint-initdb.d
 CONTAINTER_NAME=${2:-www_prod_mariadb}
 CREDENTIALS=""
-DATABASE_URL=$1
+DATABASE_URL=${1:-https://files.liferay.com/private/lrdcom/www_lportal-$(date -v -1d '+%Y-%m-%d')_19-00-PDT.sql.gz}
 INIT_DB_DIR=../mariadb/docker-entrypoint-initdb.d
 VOLUME_NAME=${3:-www-prod_www_prod_mariadb}
 
