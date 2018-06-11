@@ -9,6 +9,8 @@ networks:
 services:
   web_prod_elasticsearch:
     container_name: web_prod_elasticsearch
+    environment:
+      - "cluster.name=web_prod_elasticsearch"
     image: ryanschuhler/elasticsearch:ism
     networks:
       - "web_prod_external"
@@ -40,11 +42,11 @@ services:
     depends_on:
      - "web_prod_mariadb"
     environment:
-      - "VIRTUAL_PORT=8080"
+      - "VIRTUAL_PORT=8090"
     image: ryanschuhler/liferay:web-prod
     ports:
       - "8900:8000"
-    user: liferay
+    user: root
     networks:
       - "web_prod_external"
       - "web_prod_internal"
@@ -64,7 +66,7 @@ services:
       - "web_prod_external"
       - "web_prod_internal"
     ports:
-      - "3307:3306"
+      - "3308:3306"
     volumes:
       - "web_prod_mariadb:/var/lib/mysql"
       - "./mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/"
