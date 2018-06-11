@@ -1,0 +1,89 @@
+version: '3.3'
+
+networks:
+  www_prod_external:
+    internal: false
+  www_prod_internal:
+    internal: true
+
+services:
+  www_prod_elasticsearch:
+    container_name: www_prod_elasticsearch
+    image: ryanschuhler/elasticsearch:ism
+    networks:
+      - "www_prod_external"
+      - "www_prod_internal"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - "www_prod_elasticsearch:/usr/share/elasticsearch/data"
+  www_prod_httpd:
+    container_name: www_prod_httpd
+    environment:
+      - "EXTRA_REWRITE_RULE="
+      - "EXTRA_REWRITE_COND=RewriteRule   '^/documents/(.+)'  'https://www.liferay.com/documents/$$1'"
+      - "LIFERAY_CONTAINER_NAME=www_prod_liferay"
+      - "SERVER_NAME=localhost"
+    image: ryanschuhler/httpd:ism
+    networks:
+      - "www_prod_external"
+      - "www_prod_internal"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "www_prod_httpd:/var/www/html"
+      - "./httpd/resources/:/tmp/httpd"
+  www_prod_liferay:
+    container_name: www_prod_liferay
+    depends_on:
+     - "www_prod_mariadb"
+    environment:
+      - "VIRTUAL_PORT=8080"
+    image: ryanschuhler/liferay:www-prod
+    ports:
+      - "8000:8000"
+      - "11311:11311"
+      - "12345:12345"
+    user: liferay
+    networks:
+      - "www_prod_external"
+      - "www_prod_internal"
+    volumes:
+      - "www_prod_liferay:/opt/java/liferay/data"
+#      - "./liferay/deploy:/opt/java/liferay/deploy"
+  www_prod_mariadb:
+    container_name: www_prod_mariadb
+    environment:
+      - "collation-server=utf8mb4_unicode_ci"
+      - "character-set-server=utf8mb4"
+      - "MYSQL_ROOT_PASSWORD=passw0rd"
+      - "MYSQL_DATABASE=lportal"
+      - "MYSQL_USER=liferay"
+    image: ryanschuhler/mariadb:ism
+    networks:
+      - "www_prod_external"
+      - "www_prod_internal"
+    ports:
+      - "3307:3306"
+    volumes:
+      - "www_prod_mariadb:/var/lib/mysql"
+#      - "./mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/"
+  www_prod_hubspot:
+    container_name: www_prod_hubspot
+    image: ryanschuhler/hubspot:ism
+    networks:
+      - "www_prod_external"
+      - "www_prod_internal"
+    ports:
+      - "8080:80"
+    volumes:
+      - "www_prod_httpd:/home"
+
+volumes:
+  www_prod_elasticsearch:
+  www_prod_httpd:
+  www_prod_hubspot:
+  www_prod_liferay:
+  www_prod_mariadb:

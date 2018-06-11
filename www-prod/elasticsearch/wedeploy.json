@@ -1,7 +1,7 @@
 {
-  "id": "wwwprodelasticsearch",
-  "image": "ryanschuhler/elasticsearch:ism",
-  "volume": "/usr/share/elasticsearch/data",
-  "memory": 4096,
-  "cpu": 2
+    "id": "elasticsearch",
+    "image": "ryanschuhler/elasticsearch:ism",
+    "volume": "/usr/share/elasticsearch/data",
+    "memory": 16384,
+    "cpu": 4
 }
