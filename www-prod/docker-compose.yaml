@@ -58,6 +58,7 @@ services:
     environment:
       - "collation-server=utf8mb4_unicode_ci"
       - "character-set-server=utf8mb4"
+      - "MYSQL_PASSWORD=passw0rd"
       - "MYSQL_ROOT_PASSWORD=passw0rd"
       - "MYSQL_DATABASE=lportal"
       - "MYSQL_USER=liferay"
