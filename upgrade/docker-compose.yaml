@@ -1,0 +1,59 @@
+version: '3.3'
+
+networks:
+  www-external:
+    internal: false
+  www-internal:
+    internal: true
+
+services:
+  upgrade_liferay:
+    container_name: upgrade_liferay
+    depends_on:
+     - "upgrade_mariadb"
+    command: ["echo", "done"]
+    environment:
+      - "CATALINA_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n"
+      - "LIFERAY_DEFAULT_PERIOD_ADMIN_PERIOD_PASSWORD=www"
+      - "LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_DRIVER_UPPERCASEC_lass_UPPERCASEN_ame=org.mariadb.jdbc.Driver"
+      - "LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_PASSWORD=passw0rd"
+      - "LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_URL=jdbc:mariadb://upgrade_mariadb/lportal?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false"
+      - "LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_USERNAME=liferay"
+      - "VIRTUAL_PORT=8080"
+    entrypoint: ["/opt/java/liferay/bin/upgradedb.sh"]
+    image: ryanschuhler/liferay:www-dxp
+    networks:
+      - "www-external"
+      - "www-internal"
+    ports:
+      - "8000:8000"
+      - "8080:8080"
+    user: root
+    volumes:
+      - "liferay:/opt/java/liferay/data"
+      - "./liferay/resources:/tmp/liferay"
+      - "./liferay/resources/bin/upgradedb.sh:/opt/java/liferay/bin/upgradedb.sh"
+      - "./liferay/resources/osgi/configs:/opt/java/liferay/osgi/configs"
+      - "./liferay/resources/tools:/mnt/upgradetools"
+  upgrade_mariadb:
+    container_name: upgrade_mariadb
+    environment:
+      - "MYSQL_DATABASE=lportal"
+      - "MYSQL_PASSWORD=passw0rd"
+      - "MYSQL_ROOT_PASSWORD=passw0rd"
+      - "MYSQL_USER=liferay"
+    image: ryanschuhler/mariadb:ism
+    networks:
+      - "www-external"
+      - "www-internal"
+    ports:
+      - "3307:3306"
+    volumes:
+      - "mariadb:/var/lib/mysql"
+      - "./mariadb/resources/etc/mysql/conf.d/local.cnf:/etc/mysql/conf.d/local.cnf"
+      - "./mariadb/resources/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/"
+volumes:
+  liferay:
+  mariadb:
+   external:
+    name: www-dxp_www_dxp_mariadb

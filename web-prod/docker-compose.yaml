@@ -43,7 +43,7 @@ services:
      - "web_prod_mariadb"
     environment:
       - "VIRTUAL_PORT=8090"
-    image: ryanschuhler/liferay:web-prod
+    image: ryanschuhler/liferay:6.1
     ports:
       - "8900:8000"
     user: root
