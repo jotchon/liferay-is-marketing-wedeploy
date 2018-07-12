@@ -31,10 +31,10 @@ services:
     user: root
     volumes:
       - "liferay:/opt/java/liferay/data"
-      - "./liferay/resources:/tmp/liferay"
-      - "./liferay/resources/bin/upgradedb.sh:/opt/java/liferay/bin/upgradedb.sh"
-      - "./liferay/resources/osgi/configs:/opt/java/liferay/osgi/configs"
-      - "./liferay/resources/tools:/mnt/upgradetools"
+      - "./liferay:/tmp/liferay"
+      - "./liferay/bin/upgradedb.sh:/opt/java/liferay/bin/upgradedb.sh"
+      - "./liferay/osgi/configs:/opt/java/liferay/osgi/configs"
+      - "./liferay/tools:/mnt/upgradetools"
   upgrade_mariadb:
     container_name: upgrade_mariadb
     environment:
@@ -50,10 +50,8 @@ services:
       - "3307:3306"
     volumes:
       - "mariadb:/var/lib/mysql"
-      - "./mariadb/resources/etc/mysql/conf.d/local.cnf:/etc/mysql/conf.d/local.cnf"
-      - "./mariadb/resources/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/"
+      - "./mariadb/etc/mysql/conf.d/local.cnf:/etc/mysql/conf.d/local.cnf"
+      - "./mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/"
 volumes:
   liferay:
   mariadb:
-   external:
-    name: www-dxp_www_dxp_mariadb

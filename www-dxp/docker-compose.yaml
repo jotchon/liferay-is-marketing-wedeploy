@@ -1,0 +1,80 @@
+version: '3.3'
+
+networks:
+  www_dxp_external:
+    internal: false
+  www_dxp_internal:
+    internal: true
+
+services:
+  www_dxp_elasticsearch:
+    container_name: www_dxp_elasticsearch
+    image: ryanschuhler/elasticsearch:ism
+    networks:
+      - "www_dxp_external"
+      - "www_dxp_internal"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - "www_dxp_elasticsearch:/usr/share/elasticsearch/data"
+  www_dxp_httpd:
+    container_name: www_dxp_httpd
+    environment:
+      - "EXTRA_REWRITE_RULE="
+      - "EXTRA_REWRITE_COND=RewriteRule   '^/documents/(.+)'  'https://www.liferay.com/documents/$$1'"
+      - "LIFERAY_CONTAINER_NAME=www_dxp_liferay"
+      - "SERVER_NAME=localhost"
+    image: ryanschuhler/httpd:ism
+    networks:
+      - "www_dxp_external"
+      - "www_dxp_internal"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "www_dxp_httpd:/var/www/html"
+      - "./httpd/resources/:/tmp/httpd"
+  www_dxp_liferay:
+    container_name: www_dxp_liferay
+    depends_on:
+     - "www_dxp_mariadb"
+    environment:
+      - "VIRTUAL_PORT=8080"
+    image: ryanschuhler/liferay:www-dxp
+    ports:
+      - "8000:8000"
+      - "11311:11311"
+      - "12345:12345"
+    user: liferay
+    networks:
+      - "www_dxp_external"
+      - "www_dxp_internal"
+    volumes:
+      - "www_dxp_liferay:/opt/java/liferay/data"
+      - "./liferay/deploy:/opt/java/liferay/deploy"
+  www_dxp_mariadb:
+    container_name: www_dxp_mariadb
+    environment:
+      - "collation-server=utf8mb4_unicode_ci"
+      - "character-set-server=utf8mb4"
+      - "MYSQL_PASSWORD=passw0rd"
+      - "MYSQL_ROOT_PASSWORD=passw0rd"
+      - "MYSQL_DATABASE=lportal"
+      - "MYSQL_USER=liferay"
+    image: ryanschuhler/mariadb:ism
+    networks:
+      - "www_dxp_external"
+      - "www_dxp_internal"
+    ports:
+      - "3307:3306"
+    volumes:
+      - "www_dxp_mariadb:/var/lib/mysql"
+      - "./mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/"
+
+volumes:
+  www_dxp_elasticsearch:
+  www_dxp_httpd:
+  www_dxp_hubspot:
+  www_dxp_liferay:
+  www_dxp_mariadb:

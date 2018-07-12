@@ -2,3 +2,4 @@
 .password
 *.sql*
 **/deploy/*
+**/.idea
