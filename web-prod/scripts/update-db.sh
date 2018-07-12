@@ -2,15 +2,12 @@
 
 CONTAINTER_DIR=/docker-entrypoint-initdb.d
 CONTAINTER_NAME=${2:-web_prod_mariadb}
-CREDENTIALS=""
 DATABASE_URL=${1:-https://files.liferay.com/private/lrdcom/developer_lportal-$(date -v -1d '+%Y-%m-%d')_11-00-PDT.sql.gz}
 INIT_DB_DIR=../mariadb/docker-entrypoint-initdb.d
 REPO_ROOT=$(git rev-parse --show-toplevel)
 VOLUME_NAME=${3:-web-prod_web_prod_mariadb}
 
-if [ -f "${REPO_ROOT}/scripts/.username" ] && [ -f "${REPO_ROOT}/scripts/.password" ]; then
-	CREDENTIALS="-u $(cat ${REPO_ROOT}/scripts/.username):$(cat ${REPO_ROOT}/scripts/.password)"
-fi
+CREDENTIALS="$(source ${REPO_ROOT}/scripts/get-credentials.sh)"
 
 rm ${INIT_DB_DIR}/*
 curl ${CREDENTIALS} -o ${INIT_DB_DIR}/${DATABASE_URL##*/} -fSL ${DATABASE_URL}
