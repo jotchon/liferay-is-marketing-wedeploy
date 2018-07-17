@@ -10,7 +10,8 @@ This repo is to store wedeploy configs for webteam owned servers
 ./www-prod/scripts/init.sh
 ```
 
-* Check that all your containers have a status of "up" with `docker ps -a`
+* Press `CTRL + C` when the logs say `MySQL init process done`
+* Then check that all your containers have a status of "up" with `docker ps -a`
 * If they are not all up run this from the `www-prod` dir:
 
 ```bash
