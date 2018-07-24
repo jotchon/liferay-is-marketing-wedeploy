@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 CONTAINTER_DIR=/docker-entrypoint-initdb.d
 CONTAINTER_NAME=${2:-www_prod_mariadb}
@@ -9,9 +9,10 @@ VOLUME_NAME=${3:-www-prod_www_prod_mariadb}
 
 CREDENTIALS="$(source ${REPO_ROOT}/scripts/get-credentials.sh)"
 
-echo $CREDENTIALS
-
 rm ${INIT_DB_DIR}/*
+
+echo $DATABASE_URL
+
 curl ${CREDENTIALS} -o ${INIT_DB_DIR}/${DATABASE_URL##*/} -fSL ${DATABASE_URL}
 
 docker stop ${CONTAINTER_NAME}
